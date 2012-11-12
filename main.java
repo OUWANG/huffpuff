@@ -17,10 +17,19 @@ public class main{
 		
 		frequencyCount(text);
 
+		// Inline Comparator sort for our arrayList
+		// implements custom Comparator of freqChart
+		// compares values of Double probability
+		// and then sorts them in ascending order
+		Collections.sort(fc, new Comparator<freqChart>(){
+			public int compare(freqChart fc1, freqChart fc2){
+				return fc1.getProb().compareTo(fc2.getProb());
+			}
+		});
+
 		for (int i = 0; i < fc.size(); ++i) {
 			System.out.print(fc.get(i).getChar()+" "+fc.get(i).getCount()+" "+fc.get(i).getProb()+"\n");
 
-		// fc = sort(fc, fc.getProb());
 		}
 	}
 
@@ -71,10 +80,10 @@ class freqChart{
 	private int count;
 	private double probability;
 
-	public freqChart(char currChar) {
-		ch = currChar;
-		count = 1;
-		probability = 0.0;
+	public freqChart(char ch) {
+		this.ch = ch;
+		this.count = 1;
+		this.probability = 0.0;
 	}
 
 	public char getChar() {
@@ -85,7 +94,7 @@ class freqChart{
 		return count;
 	}
 
-	public double getProb() {
+	public Double getProb() {
 		return probability;
 	}
 
@@ -101,6 +110,8 @@ class freqChart{
 
 }
 
-// class huffTree{
+class huffTree{
 
-// }
+	private char ch;
+	private double probability;
+}
