@@ -1,6 +1,6 @@
-# COP 3503 Assignment 4 - Huffman Coding
+# CS2 Huffman Coding Algorithm Implementation #
 
-## Introduction
+## Introduction ##
 
 ```no-highlight
 O Romeo, Romeo! wherefore art thou Romeo?
