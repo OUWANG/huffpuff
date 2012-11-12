@@ -21,13 +21,14 @@ public class main{
 		// implements custom Comparator of freqChart
 		// compares values of Double probability
 		// and then sorts them in ascending order
-		Collections.sort(fc, new freqProbComparator());
+		// Collections.sort(fc, new freqProbComparator());
 
-		for (int i = 0; i < fc.size(); ++i) {
-			System.out.print(fc.get(i).getChar()+" "+fc.get(i).getCount()+" "+fc.get(i).getProb()+"\n");
-		}
+		// for (int i = 0; i < fc.size(); ++i)
+			// System.out.print(fc.get(i).getChar()+" "+fc.get(i).getCount()+" "+fc.get(i).getProb()+"\n");
 
-		buildTree();
+		treeNode root = buildTree();
+
+		traverseTree(root);
 	}
 
 	public static void frequencyCount(String text) {
@@ -70,8 +71,7 @@ public class main{
 		return -1;
 	}
 
-	public static void buildTree() {
-
+	public static treeNode buildTree() {
 		PriorityQueue<treeNode> pq = new PriorityQueue<treeNode>(fc.size(), new pqProbComparator());
 
 		for (int i = 0; i < fc.size(); ++i) {
@@ -84,6 +84,16 @@ public class main{
 			treeNode tn = new treeNode('\0', temp1.getProb() + temp2.getProb(), temp1, temp2);
 			pq.offer(tn);
 		}
+
+		return pq.poll();
+	}
+
+	public static void traverseTree(treeNode node) {
+		if (node == null)
+			return;
+		System.out.println(node.getChar()+" "+node.getProb());
+		traverseTree(node.getLeft());
+		traverseTree(node.getRight());
 	}
 }
 
@@ -155,5 +165,13 @@ class treeNode{
 
 	public Double getProb() {
 		return this.probability;
+	}
+
+	public treeNode getLeft() {
+		return this.left;
+	}
+
+	public treeNode getRight() {
+		return this.right;
 	}
 }
