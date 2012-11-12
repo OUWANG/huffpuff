@@ -4,15 +4,20 @@ import java.io.*;
 public class main{
 
 	private static ArrayList<freqChart> fc = new ArrayList<freqChart>();
+	private static ArrayList<huffTable> huff = new ArrayList<huffTable>();
 
 	public static void main(String args[]) throws Exception{
+		
 		Scanner fin = new Scanner(new File("juliuscaesar.txt"));
+		BufferedWriter out = new BufferedWriter(new FileWriter(new File("encoded.txt")));
 		
 		String text = "";
 
-		while(fin.hasNextLine())
+		while(fin.hasNextLine()){
 			text += fin.nextLine();
-		
+			text += "\n";
+		}
+
 		// System.out.println(text);
 		
 		frequencyCount(text);
@@ -25,10 +30,15 @@ public class main{
 
 		// for (int i = 0; i < fc.size(); ++i)
 			// System.out.print(fc.get(i).getChar()+" "+fc.get(i).getCount()+" "+fc.get(i).getProb()+"\n");
+		// System.out.println(fc.size());
 
 		treeNode root = buildTree();
+		String huffCode = "";
+		traverseTree(root, huffCode);
 
-		traverseTree(root);
+		for (int i = 0; i < text.size(); ++i) {
+			
+		}
 	}
 
 	public static void frequencyCount(String text) {
@@ -88,16 +98,17 @@ public class main{
 		return pq.poll();
 	}
 
-	public static void traverseTree(treeNode node) {
-		String huffCode = "";
+	public static void traverseTree(treeNode node, String huffCode) {
 		if (node == null)
 			return;
-		if (node.getChar() != '\0') {
-			System.out.println("Need huffCode here");
+
+		if (node.getChar() != '\0') { // || if(node.getLeft() == null && node.getRight() == null)
+			// System.out.println(node.getChar()+" "+huffCode);
+			huff.add(new huffTable(node.getChar(), huffCode));
 		}
-		System.out.println(node.getChar()+" "+node.getProb());
-		traverseTree(node.getLeft());
-		traverseTree(node.getRight());
+		// System.out.println(node.getChar()+" "+node.getProb());
+		traverseTree(node.getLeft(),huffCode+"0");
+		traverseTree(node.getRight(),huffCode+"1");
 	}
 }
 
@@ -138,11 +149,11 @@ class freqChart{
 	}
 }
 
-class freqProbComparator implements Comparator<freqChart> {
-	public int compare(freqChart fc1, freqChart fc2) {
-		return fc1.getProb().compareTo(fc2.getProb());
-	}
-}
+// class freqProbComparator implements Comparator<freqChart> {
+// 	public int compare(freqChart fc1, freqChart fc2) {
+// 		return fc1.getProb().compareTo(fc2.getProb());
+// 	}
+// }
 
 class pqProbComparator implements Comparator<treeNode> {
 	public int compare(treeNode tn1, treeNode tn2) {
@@ -159,7 +170,7 @@ class treeNode{
 
 	public treeNode(char ch, double probability, treeNode left, treeNode right){
 		this.ch = ch;
-		this.probability = probability;
+		this.probability = probability ;
 		this.left = left;
 		this.right = right;
 		this.huffCode = null;
@@ -183,5 +194,23 @@ class treeNode{
 
 	public void sethuffCode(String huffCode) {
 		this.huffCode = huffCode;
+	}
+}
+
+class huffTable{
+	private char ch;
+	private String huffCode;
+
+	public huffTable(char ch, String huffCode){
+		this.ch = ch;
+		this.huffCode = huffCode;
+	}
+
+	public char getChar() {
+		return this.ch;
+	}
+
+	public String gethuffCode() {
+		return this.huffCode;
 	}
 }
