@@ -29,8 +29,8 @@ public class main{
 
 		for (int i = 0; i < fc.size(); ++i) {
 			System.out.print(fc.get(i).getChar()+" "+fc.get(i).getCount()+" "+fc.get(i).getProb()+"\n");
-
 		}
+
 	}
 
 	public static void frequencyCount(String text) {
@@ -94,6 +94,10 @@ class freqChart{
 		return count;
 	}
 
+	// this get method must be object type Double
+	// in order to implement custom comparator
+	// because we cannot use primitive types 
+	// that is, double has no such method compareTo(), etc.
 	public Double getProb() {
 		return probability;
 	}
@@ -110,8 +114,18 @@ class freqChart{
 
 }
 
+/*
+class freqProbComparator implements Comparator<freqChart> {
+	public int compare(freqChart fc1, freqChart fc2) {
+		return fc1.getProb().compareTo(fc2.getProb());
+	}
+}
+*/
+
 class huffTree{
 
 	private char ch;
 	private double probability;
+
+	
 }
