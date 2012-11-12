@@ -89,8 +89,12 @@ public class main{
 	}
 
 	public static void traverseTree(treeNode node) {
+		String huffCode = "";
 		if (node == null)
 			return;
+		if (node.getChar() != '\0') {
+			System.out.println("Need huffCode here");
+		}
 		System.out.println(node.getChar()+" "+node.getProb());
 		traverseTree(node.getLeft());
 		traverseTree(node.getRight());
@@ -151,12 +155,14 @@ class treeNode{
 	private double probability;
 	private treeNode left;
 	private treeNode right;
+	private String huffCode;
 
 	public treeNode(char ch, double probability, treeNode left, treeNode right){
 		this.ch = ch;
 		this.probability = probability;
 		this.left = left;
 		this.right = right;
+		this.huffCode = null;
 	}
 
 	public char getChar() {
@@ -173,5 +179,9 @@ class treeNode{
 
 	public treeNode getRight() {
 		return this.right;
+	}
+
+	public void sethuffCode(String huffCode) {
+		this.huffCode = huffCode;
 	}
 }
