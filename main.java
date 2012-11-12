@@ -19,6 +19,8 @@ public class main{
 
 		for (int i = 0; i < fc.size(); ++i) {
 			System.out.print(fc.get(i).getChar()+" "+fc.get(i).getCount()+" "+fc.get(i).getProb()+"\n");
+
+		// fc = sort(fc, fc.getProb());
 		}
 	}
 
@@ -97,4 +99,8 @@ class freqChart{
 	}
 
 
-}s
+}
+
+// class huffTree{
+
+// }
