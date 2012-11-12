@@ -17,20 +17,17 @@ public class main{
 		
 		frequencyCount(text);
 
-		// Inline Comparator sort for our arrayList
+		// construct Comparator sort for our arrayList
 		// implements custom Comparator of freqChart
 		// compares values of Double probability
 		// and then sorts them in ascending order
-		Collections.sort(fc, new Comparator<freqChart>(){
-			public int compare(freqChart fc1, freqChart fc2){
-				return fc1.getProb().compareTo(fc2.getProb());
-			}
-		});
+		Collections.sort(fc, new freqProbComparator());
 
 		for (int i = 0; i < fc.size(); ++i) {
 			System.out.print(fc.get(i).getChar()+" "+fc.get(i).getCount()+" "+fc.get(i).getProb()+"\n");
 		}
 
+		buildTree();
 	}
 
 	public static void frequencyCount(String text) {
@@ -42,7 +39,7 @@ public class main{
 		// else increase the frequency count for that char
 		for (int i = 0; i < text.length(); ++i) {
 			currChar = text.charAt(i);
-			indexOfChar = findChar(fc, currChar);
+			indexOfChar = findChar(currChar);
 			if (indexOfChar != -1)
 				fc.get(indexOfChar).addCount();
 			else
@@ -56,7 +53,7 @@ public class main{
 		}
 	}
 
-	public static int findChar(ArrayList<freqChart> fc, char currChar) {
+	public static int findChar(char currChar) {
 		// searches for currChar in all instances of freqChart
 		// if found returns index of currChar in ArrayList fc
 		// else returns -1
@@ -72,10 +69,25 @@ public class main{
 		// System.out.println("\n"+currChar+" not found returning -1");
 		return -1;
 	}
+
+	public static void buildTree() {
+
+		PriorityQueue<treeNode> pq = new PriorityQueue<treeNode>(fc.size(), new pqProbComparator());
+
+		for (int i = 0; i < fc.size(); ++i) {
+			treeNode tn = new treeNode(fc.get(i).getChar(), fc.get(i).getProb(), null, null);
+			pq.offer(tn);
+		}
+		while	(pq.size() > 1){
+			treeNode temp1 = pq.poll();
+			treeNode temp2 = pq.poll();
+			treeNode tn = new treeNode('\0', temp1.getProb() + temp2.getProb(), temp1, temp2);
+			pq.offer(tn);
+		}
+	}
 }
 
-class freqChart{
-	
+class freqChart{	
 	private char ch;
 	private int count;
 	private double probability;
@@ -110,22 +122,38 @@ class freqChart{
 	public void addCount() {
 		++count;
 	}
-
-
 }
 
-/*
 class freqProbComparator implements Comparator<freqChart> {
 	public int compare(freqChart fc1, freqChart fc2) {
 		return fc1.getProb().compareTo(fc2.getProb());
 	}
 }
-*/
 
-class huffTree{
+class pqProbComparator implements Comparator<treeNode> {
+	public int compare(treeNode tn1, treeNode tn2) {
+		return tn1.getProb().compareTo(tn2.getProb());
+	}
+}
 
+class treeNode{
 	private char ch;
 	private double probability;
+	private treeNode left;
+	private treeNode right;
 
-	
+	public treeNode(char ch, double probability, treeNode left, treeNode right){
+		this.ch = ch;
+		this.probability = probability;
+		this.left = left;
+		this.right = right;
+	}
+
+	public char getChar() {
+		return this.ch;
+	}
+
+	public Double getProb() {
+		return this.probability;
+	}
 }
