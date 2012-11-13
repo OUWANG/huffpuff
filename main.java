@@ -3,25 +3,17 @@ import java.io.*;
 
 public class main{
 
-	private static ArrayList<freqChart> fc = new ArrayList<freqChart>();
-private static ArrayList<huffTable> huff = new ArrayList<huffTable>();
-
-	public static void main(String args[]) throws Exception{
+	public static void main(String args[]) throws IOException{
 		String[] inputFiles = {"juliuscaesar.txt","macbeth.txt","othello.txt"};
-
-		Scanner fin = new Scanner(new File("juliuscaesar.txt"));
-		BufferedWriter out = new BufferedWriter(new FileWriter(new File("encoded.txt")));
-		
-		String text = "";
-
-		while(fin.hasNextLine()){
-			text += fin.nextLine();
-			text += "\n";
+		for (int i = 0; i < inputFiles.length; ++i) {
+			Scanner fin = new Scanner(new File(inputFiles[i]));
+			doHuff(fin);	
 		}
-
-		// System.out.println(text);
 		
-		frequencyCount(text);
+		
+		// Scanner fin = new Scanner(new File("juliuscaesar.txt"));
+		
+		// frequencyCount(text);
 
 		// construct Comparator sort for our arrayList
 		// implements custom Comparator of freqChart
@@ -33,21 +25,41 @@ private static ArrayList<huffTable> huff = new ArrayList<huffTable>();
 			// System.out.print(fc.get(i).getChar()+" "+fc.get(i).getCount()+" "+fc.get(i).getProb()+"\n");
 		// System.out.println(fc.size());
 
-		treeNode root = buildTree();
+	}
+	
+	public static void doHuff(Scanner fin) throws IOException{
+		ArrayList<freqChart> fc = new ArrayList<freqChart>();
+		ArrayList<huffTable> huff = new ArrayList<huffTable>();
+
+		BufferedWriter enout = new BufferedWriter(new FileWriter(new File("encoded.txt")));
+		BufferedWriter deout = new BufferedWriter(new FileWriter(new File("decoded.txt")));
+		String text = "";
+
+		while(fin.hasNextLine()){
+			text += fin.nextLine();
+			text += "\n";
+		}
+
+		frequencyCount(text, fc);
+
+		treeNode root = buildTree(fc);
+		
 		String huffCode = "";
-		traverseTree(root, huffCode);
+		
+		traverseTree(root, huffCode, huff);
+		
 		int indexOfChar, encodedLength = 0;
 		for (int i = 0; i < text.length(); ++i) {
 			indexOfChar = findHuffChar(text.charAt(i), huff);
 			encodedLength += huff.get(indexOfChar).gethuffCode().length();
-			out.write(huff.get(indexOfChar).gethuffCode()+" ");
+			enout.write(huff.get(indexOfChar).gethuffCode()+" ");
 		}
 
 		double compressionRatio = (double) encodedLength / (text.length()*8);
 		System.out.println(compressionRatio);
 	}
-
-	public static void frequencyCount(String text) {
+	
+	public static void frequencyCount(String text, ArrayList<freqChart> fc) {
 		char currChar;
 		int indexOfChar;
 		
@@ -96,7 +108,7 @@ private static ArrayList<huffTable> huff = new ArrayList<huffTable>();
 		return -1;
 	}
 
-	public static treeNode buildTree() {
+	public static treeNode buildTree(ArrayList<freqChart> fc) {
 		PriorityQueue<treeNode> pq = new PriorityQueue<treeNode>(fc.size(), new pqProbComparator());
 
 		for (int i = 0; i < fc.size(); ++i) {
@@ -113,7 +125,7 @@ private static ArrayList<huffTable> huff = new ArrayList<huffTable>();
 		return pq.poll();
 	}
 
-	public static void traverseTree(treeNode node, String huffCode) {
+	public static void traverseTree(treeNode node, String huffCode, ArrayList<huffTable> huff) {
 		if (node == null)
 			return;
 
@@ -122,8 +134,8 @@ private static ArrayList<huffTable> huff = new ArrayList<huffTable>();
 			huff.add(new huffTable(node.getChar(), huffCode));
 		}
 		// System.out.println(node.getChar()+" "+node.getProb());
-		traverseTree(node.getLeft(),huffCode+"0");
-		traverseTree(node.getRight(),huffCode+"1");
+		traverseTree(node.getLeft(), huffCode+"0", huff);
+		traverseTree(node.getRight(), huffCode+"1", huff);
 	}
 }
 
