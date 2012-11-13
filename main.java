@@ -4,10 +4,11 @@ import java.io.*;
 public class main{
 
 	private static ArrayList<freqChart> fc = new ArrayList<freqChart>();
-	private static ArrayList<huffTable> huff = new ArrayList<huffTable>();
+private static ArrayList<huffTable> huff = new ArrayList<huffTable>();
 
 	public static void main(String args[]) throws Exception{
-		
+		String[] inputFiles = {"juliuscaesar.txt","macbeth.txt","othello.txt"};
+
 		Scanner fin = new Scanner(new File("juliuscaesar.txt"));
 		BufferedWriter out = new BufferedWriter(new FileWriter(new File("encoded.txt")));
 		
@@ -35,10 +36,15 @@ public class main{
 		treeNode root = buildTree();
 		String huffCode = "";
 		traverseTree(root, huffCode);
-
-		for (int i = 0; i < text.size(); ++i) {
-			
+		int indexOfChar, encodedLength = 0;
+		for (int i = 0; i < text.length(); ++i) {
+			indexOfChar = findHuffChar(text.charAt(i), huff);
+			encodedLength += huff.get(indexOfChar).gethuffCode().length();
+			out.write(huff.get(indexOfChar).gethuffCode()+" ");
 		}
+
+		double compressionRatio = (double) encodedLength / (text.length()*8);
+		System.out.println(compressionRatio);
 	}
 
 	public static void frequencyCount(String text) {
@@ -50,7 +56,7 @@ public class main{
 		// else increase the frequency count for that char
 		for (int i = 0; i < text.length(); ++i) {
 			currChar = text.charAt(i);
-			indexOfChar = findChar(currChar);
+			indexOfChar = findChar(currChar, fc);
 			if (indexOfChar != -1)
 				fc.get(indexOfChar).addCount();
 			else
@@ -64,7 +70,7 @@ public class main{
 		}
 	}
 
-	public static int findChar(char currChar) {
+	public static int findChar(char currChar, ArrayList<freqChart> fc) {
 		// searches for currChar in all instances of freqChart
 		// if found returns index of currChar in ArrayList fc
 		// else returns -1
@@ -78,6 +84,15 @@ public class main{
 			}
 		}
 		// System.out.println("\n"+currChar+" not found returning -1");
+		return -1;
+	}
+
+	public static int findHuffChar(char currChar, ArrayList<huffTable> huff) {
+		for (int i = 0; i < huff.size(); ++i) {
+			if (huff.get(i).getChar() == currChar) {
+				return i;
+			}
+		}
 		return -1;
 	}
 
