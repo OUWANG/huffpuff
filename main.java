@@ -4,26 +4,21 @@ import java.io.*;
 public class main{
 
 	public static void main(String args[]) throws IOException{
+		
 		String[] inputFiles = {"juliuscaesar.txt","macbeth.txt","othello.txt"};
+		
 		for (int i = 0; i < inputFiles.length; ++i) {
 			Scanner fin = new Scanner(new File(inputFiles[i]));
 			doHuff(fin);	
 		}
-		
-		
-		// Scanner fin = new Scanner(new File("juliuscaesar.txt"));
-		
-		// frequencyCount(text);
-
-		// construct Comparator sort for our arrayList
-		// implements custom Comparator of freqChart
-		// compares values of Double probability
-		// and then sorts them in ascending order
-		// Collections.sort(fc, new freqProbComparator());
-
-		// for (int i = 0; i < fc.size(); ++i)
-			// System.out.print(fc.get(i).getChar()+" "+fc.get(i).getCount()+" "+fc.get(i).getProb()+"\n");
-		// System.out.println(fc.size());
+		// Scanner fin = new Scanner(new File("newlinetest.txt"));
+		// doHuff(fin);	
+		/** construct Comparator sort for our arrayList
+		 	* implements custom Comparator of freqChart
+			* compares values of Double probability
+			* and then sorts them in ascending order
+			* Collections.sort(fc, new freqProbComparator());
+			*/
 
 	}
 	
@@ -42,17 +37,37 @@ public class main{
 
 		frequencyCount(text, fc);
 
+		for (int i = 0; i < fc.size(); ++i)
+			System.out.print(fc.get(i).getChar()+" "+fc.get(i).getCount()+" "+fc.get(i).getProb()+"\n");
+		System.out.println(fc.size());
+
 		treeNode root = buildTree(fc);
 		
 		String huffCode = "";
 		
 		traverseTree(root, huffCode, huff);
 		
+		// encode
 		int indexOfChar, encodedLength = 0;
 		for (int i = 0; i < text.length(); ++i) {
 			indexOfChar = findHuffChar(text.charAt(i), huff);
 			encodedLength += huff.get(indexOfChar).gethuffCode().length();
+			System.out.println(huff.get(indexOfChar).gethuffCode());
 			enout.write(huff.get(indexOfChar).gethuffCode()+" ");
+		}
+
+		// decode
+		Scanner encfin = new Scanner(new File("encoded.txt"));
+		ArrayList<String> huffCodeList = new ArrayList<String>();
+		while(encfin.hasNext()) {
+			huffCodeList.add(encfin.next());
+		}
+		// System.out.println(huffCodeList.get(0));
+		int indexOfCode;
+		for (int i = 0; i < huffCodeList.size(); ++i) {
+			System.out.println(i);
+			indexOfCode = findHuffChar(huffCodeList.get(i), huff);
+			deout.write(huff.get(indexOfCode).getChar());
 		}
 
 		double compressionRatio = (double) encodedLength / (text.length()*8);
@@ -105,6 +120,19 @@ public class main{
 				return i;
 			}
 		}
+		return -1;
+	}
+
+	public static int findHuffChar(String huffCode, ArrayList<huffTable> huff) {
+		for (int i = 0; i < huff.size(); ++i) {
+			// if (huff.get(i).gethuffCode() == huffCode) {
+			// 	return i;
+			// }
+			if (huffCode.equals(huff.get(i).gethuffCode())) {
+				return i;
+			}
+		}
+		System.out.println("did not find "+huffCode+" in huffTable, returning -1");
 		return -1;
 	}
 
