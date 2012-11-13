@@ -65,7 +65,7 @@ public class main{
 		// System.out.println(huffCodeList.get(0));
 		int indexOfCode;
 		for (int i = 0; i < huffCodeList.size(); ++i) {
-			System.out.println(i);
+			// System.out.println(i);
 			indexOfCode = findHuffChar(huffCodeList.get(i), huff);
 			deout.write(huff.get(indexOfCode).getChar());
 		}
