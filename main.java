@@ -73,9 +73,10 @@ public class main{
 		for (int i = 0; i < text.length(); ++i) {
 			indexOfChar = findHuffChar(text.charAt(i), huff);
 			encodedLength += huff.get(indexOfChar).gethuffCode().length();
-			System.out.println(huff.get(indexOfChar).gethuffCode());
+			// System.out.println(huff.get(indexOfChar).gethuffCode());
 			enout.write(huff.get(indexOfChar).gethuffCode()+" ");
 		}
+		enout.close();
 
 		// decode
 		Scanner encfin = new Scanner(new File("encoded.txt"));
@@ -90,6 +91,7 @@ public class main{
 			indexOfCode = findHuffChar(huffCodeList.get(i), huff);
 			deout.write(huff.get(indexOfCode).getChar());
 		}
+		deout.close();
 
 		double compressionRatio = (double) encodedLength / (text.length()*8);
 		System.out.println(compressionRatio);
@@ -179,7 +181,7 @@ public class main{
 			return;
 
 		if (node.getChar() != '\0') { // || if(node.getLeft() == null && node.getRight() == null)
-			// System.out.println(node.getChar()+" "+huffCode);
+			System.out.println(node.getChar()+"*"+huffCode+"*");
 			huff.add(new huffTable(node.getChar(), huffCode));
 		}
 		// System.out.println(node.getChar()+" "+node.getProb());
