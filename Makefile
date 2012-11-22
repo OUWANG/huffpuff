@@ -1,13 +1,13 @@
-compile-all: main encode decode
+compile-all: decode encode build
 
-main: main.java
-	javac main.java
-
-decode: decode.java
-	javac decode.java
+decode: decode.java huffTable.java
+	javac decode.java huffTable.java
 
 encode: encode.java
 	javac encode.java
+
+build: buildTree.java freqChart.java huffTable.java
+	javac buildTree.java freqChart.java huffTable.java
 
 clean:
 	rm -f *.class
