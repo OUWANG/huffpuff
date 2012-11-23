@@ -1,11 +1,12 @@
-compile-all: encode.class decode.class
+compile-all: encode decode
 
-encode.class: encode.java buildTree.java freqChart.java huffTable.java
-	javac encode.java buildTree.java freqChart.java huffTable.java
+.PHONY: decode encode clean
 
-decode.class: decode.java huffTable.java
+encode: encode.java buildTree.java huffTable.java
+	javac encode.java buildTree.java huffTable.java
+
+decode: decode.java huffTable.java
 	javac decode.java huffTable.java
 
-.PHONY: clean
 clean:
 	rm -f *.class
