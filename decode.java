@@ -36,7 +36,7 @@ public class decode {
 				huff.add(new huffTable(' ', currLine[1]));
 				continue;
 			}
-			System.out.println(currLine[0]+" "+currLine[1]);
+			// System.out.println(currLine[0]+" "+currLine[1]);
 			huff.add(new huffTable(currLine[0].charAt(0), currLine[1]));
 			// huff.add(new huffTable(treein.next().charAt(0), treein.next()));
 		}

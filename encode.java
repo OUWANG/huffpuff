@@ -20,12 +20,12 @@ public class encode {
 			// encodedLength += h.gethuffCode().length() + 1 + 1;
 			// System.out.println(currHuff.gethuffCode()+" "+currHuff.getChar());
 			if (currHuff.getChar() == '\n') {
-				System.out.println("hiiiiii");
+				// System.out.println("hiiiiii");
 				treeout.write("\\n" +" "+currHuff.gethuffCode()+"\n");
 				continue;
 			}
 			if (currHuff.getChar() == ' ') {
-				System.out.println("spaaace");
+				// System.out.println("spaaace");
 				treeout.write("\\s"+" "+currHuff.gethuffCode()+"\n");
 				continue;
 			}
